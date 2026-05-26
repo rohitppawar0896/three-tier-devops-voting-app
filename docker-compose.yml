@@ -5,34 +5,32 @@
 services:
   vote:
     build: 
-      context: ./vote
+      context: ./app/vote
       target: dev
     depends_on:
-      redis:
-        condition: service_healthy
-    healthcheck: 
-      test: ["CMD", "curl", "-f", "http://localhost"]
-      interval: 15s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
+      - redis
+    # healthcheck: 
+    #   test: ["CMD", "curl", "-f", "http://localhost"]
+    #   interval: 15s
+    #   timeout: 5s
+    #   retries: 3
+    #   start_period: 10s
     volumes:
-     - ./vote:/usr/local/app
+     - ./app/vote:/usr/local/app
     ports:
-      - "8080:80"
+      - "8082:80"
     networks:
       - front-tier
       - back-tier
 
   result:
-    build: ./result
+    build: ./app/result
     # use nodemon rather than node for local dev
     entrypoint: nodemon --inspect=0.0.0.0 server.js
     depends_on:
-      db:
-        condition: service_healthy 
+      - db
     volumes:
-      - ./result:/usr/local/app
+      - ./app/result:/usr/local/app
     ports:
       - "8081:80"
       - "127.0.0.1:9229:9229"
@@ -42,22 +40,21 @@ services:
 
   worker:
     build:
-      context: ./worker
+      context: ./app/worker
     depends_on:
-      redis:
-        condition: service_healthy 
-      db:
-        condition: service_healthy 
+      - redis    
+      - db
+      
     networks:
       - back-tier
 
   redis:
     image: redis:alpine
     volumes:
-      - "./healthchecks:/healthchecks"
-    healthcheck:
-      test: /healthchecks/redis.sh
-      interval: "5s"
+      - "./app/healthchecks:/healthchecks"
+    # healthcheck:
+    #   test: /healthchecks/redis.sh
+    #   interval: "5s"
     networks:
       - back-tier
 
@@ -68,10 +65,10 @@ services:
       POSTGRES_PASSWORD: "postgres"
     volumes:
       - "db-data:/var/lib/postgresql/data"
-      - "./healthchecks:/healthchecks"
-    healthcheck:
-      test: /healthchecks/postgres.sh
-      interval: "5s"
+      - "./app/healthchecks:/healthchecks"
+    # healthcheck:
+    #   test: /healthchecks/postgres.sh
+    #   interval: "5s"
     networks:
       - back-tier
 
@@ -79,11 +76,10 @@ services:
   # it won't run unless you specify the "seed" profile
   # docker compose --profile seed up -d
   seed:
-    build: ./seed-data
+    build: ./app/seed-data
     profiles: ["seed"]
     depends_on:
-      vote:
-        condition: service_healthy 
+      - vote
     networks:
       - front-tier
     restart: "no"
