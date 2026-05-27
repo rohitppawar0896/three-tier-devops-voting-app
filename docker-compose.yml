@@ -1,6 +1,7 @@
 services:
 
   vote:
+    image: voting-app:v1
     build:
       context: ./app/vote
       target: dev
@@ -28,6 +29,7 @@ services:
 
 
   result:
+    image: result-app:v1
     build: ./app/result
 
     entrypoint: nodemon --inspect=0.0.0.0 server.js
@@ -56,6 +58,7 @@ services:
 
 
   worker:
+    image: worker-app:v1
     build:
       context: ./app/worker
 
@@ -109,6 +112,7 @@ services:
 
 
   seed:
+    image: seed-app:v1
     build: ./app/seed-data
 
     profiles:
