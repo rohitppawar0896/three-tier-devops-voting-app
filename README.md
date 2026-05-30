@@ -15,4 +15,4 @@ Production-style DevOps project implementing:
 - Jenkins
 - Prometheus
 - Grafana
-- Azure VM
+- Azure VM 
