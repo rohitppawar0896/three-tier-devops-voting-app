@@ -3,34 +3,33 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
+        stage('Checkout Validation') {
             steps {
                 echo 'Repository checkout successful'
             }
         }
 
-        stage('Environment Info') {
+        stage('Build Vote Image') {
             steps {
-                bat 'cd'
-                bat 'dir'
+                bat 'docker build -t voting-app:%BUILD_NUMBER% app\\vote'
             }
         }
 
-        stage('Git Version') {
+        stage('Build Worker Image') {
             steps {
-                bat 'git --version'
+                bat 'docker build -t worker-app:%BUILD_NUMBER% app\\worker'
             }
         }
 
-        stage('Docker Version') {
+        stage('Build Result Image') {
             steps {
-                bat 'docker --version'
+                bat 'docker build -t result-app:%BUILD_NUMBER% app\\result'
             }
         }
 
-        stage('Kubectl Version') {
+        stage('Verify Images') {
             steps {
-                bat 'kubectl version --client'
+                bat 'docker images'
             }
         }
     }
