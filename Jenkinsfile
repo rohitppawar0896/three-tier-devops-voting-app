@@ -40,5 +40,35 @@ pipeline {
                 }
             }
         }
+
+        stage('Docker Hub Login') {
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-creds',
+                        usernameVariable: 'DOCKER_USER',
+                        passwordVariable: 'DOCKER_PASS'
+                    )
+                ]) {
+                    bat 'echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin'
+                }
+            }
+        }
+
+        stage('Tag Images') {
+            steps {
+                bat 'docker tag voting-app:%BUILD_NUMBER% sketcherrp/voting-app:%BUILD_NUMBER%'
+                bat 'docker tag worker-app:%BUILD_NUMBER% sketcherrp/worker-app:%BUILD_NUMBER%'
+                bat 'docker tag result-app:%BUILD_NUMBER% sketcherrp/result-app:%BUILD_NUMBER%'
+            }
+        }
+
+        stage('Push Images') {
+            steps {
+                bat 'docker push sketcherrp/voting-app:%BUILD_NUMBER%'
+                bat 'docker push sketcherrp/worker-app:%BUILD_NUMBER%'
+                bat 'docker push sketcherrp/result-app:%BUILD_NUMBER%'
+            }
+        }
     }
 }
