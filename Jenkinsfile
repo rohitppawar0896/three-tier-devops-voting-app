@@ -32,11 +32,12 @@ pipeline {
                 bat 'docker images'
             }
         }
-        
+
         stage('Cluster Validation') {
             steps {
-                bat 'kubectl get nodes'
-                bat 'kubectl get pods -A'
+                withEnv(["KUBECONFIG=C:\\Users\\Rohit\\.kube\\config"]) {
+                    bat 'kubectl get nodes'
+                }
             }
         }
     }
