@@ -19,8 +19,8 @@ spec:
     spec:
       containers:
         - name: result
-          image: result-app:v1
-          imagePullPolicy: Never
+          image: sketcherrp/result-app:latest
+          imagePullPolicy: Always
 
           ports:
             - containerPort: 80

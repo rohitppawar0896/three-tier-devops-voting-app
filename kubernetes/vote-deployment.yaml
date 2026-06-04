@@ -19,8 +19,8 @@ spec:
     spec:
       containers:
         - name: vote
-          image: voting-app:v1
-          imagePullPolicy: Never
+          image: sketcherrp/voting-app:latest
+          imagePullPolicy: Always
 
           ports:
             - containerPort: 80
