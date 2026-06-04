@@ -60,6 +60,10 @@ pipeline {
                 bat 'docker tag voting-app:%BUILD_NUMBER% sketcherrp/voting-app:%BUILD_NUMBER%'
                 bat 'docker tag worker-app:%BUILD_NUMBER% sketcherrp/worker-app:%BUILD_NUMBER%'
                 bat 'docker tag result-app:%BUILD_NUMBER% sketcherrp/result-app:%BUILD_NUMBER%'
+
+                bat 'docker tag voting-app:%BUILD_NUMBER% sketcherrp/voting-app:latest'
+                bat 'docker tag worker-app:%BUILD_NUMBER% sketcherrp/worker-app:latest'
+                bat 'docker tag result-app:%BUILD_NUMBER% sketcherrp/result-app:latest'
             }
         }
 
@@ -68,6 +72,10 @@ pipeline {
                 bat 'docker push sketcherrp/voting-app:%BUILD_NUMBER%'
                 bat 'docker push sketcherrp/worker-app:%BUILD_NUMBER%'
                 bat 'docker push sketcherrp/result-app:%BUILD_NUMBER%'
+
+                bat 'docker push sketcherrp/voting-app:latest'
+                bat 'docker push sketcherrp/worker-app:latest'
+                bat 'docker push sketcherrp/result-app:latest'
             }
         }
     }
