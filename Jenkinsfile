@@ -83,6 +83,11 @@ pipeline {
             steps {
                 withEnv(["KUBECONFIG=C:\\Users\\Rohit\\.kube\\config"]) {
                     bat 'kubectl apply -f kubernetes'
+
+                    bat 'kubectl rollout restart deployment/vote'
+                    bat 'kubectl rollout restart deployment/worker'
+                    bat 'kubectl rollout restart deployment/result'
+
                     bat 'kubectl rollout status deployment/vote'
                     bat 'kubectl rollout status deployment/worker'
                     bat 'kubectl rollout status deployment/result'
