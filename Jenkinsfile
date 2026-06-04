@@ -78,5 +78,17 @@ pipeline {
                 bat 'docker push sketcherrp/result-app:latest'
             }
         }
+
+        stage('Deploy Kubernetes') {
+            steps {
+                withEnv(["KUBECONFIG=C:\\Users\\Rohit\\.kube\\config"]) {
+                    bat 'kubectl apply -f kubernetes'
+                    bat 'kubectl rollout status deployment/vote'
+                    bat 'kubectl rollout status deployment/worker'
+                    bat 'kubectl rollout status deployment/result'
+                }
+            }
+        }
+
     }
 }
